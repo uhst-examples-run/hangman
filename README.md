@@ -1,76 +1,29 @@
-# Multiplayer Hangman
+# Backendless Multiplayer Hangman
 
-![](https://github.com/MultiplayerHangman/MultiplayerHangman/raw/master/Resources/screenshot.png)
+![](https://github.com/uhst-examples-run/hangman/raw/master/Resources/screenshot.png)
 
-A multiplayer hangman game using Python and Javascript. For [Side Project Club](https://www.facebook.com/sideprojectclub/) in Winter 2018 at the University of Waterloo.
+Port of [Side Project Club](https://www.facebook.com/sideprojectclub/)'s multiplayer hangman game to UHST using purely Javascript. See the original (Python+Javascript) game here: https://github.com/MultiplayerHangman/MultiplayerHangman
 
 Video demo: [https://www.youtube.com/watch?v=hay36VJ2_Xw](https://www.youtube.com/watch?v=hay36VJ2_Xw)
 
-
-## Team members
-
-- Teresa (@TeresaTXCA)
-- Eric (@Exxliang)
-- Alex (@alextwin)
-
-
 ## Running
 
-For setup instructions, go to [SETUP](https://github.com/MultiplayerHangman/MultiplayerHangman/blob/master/SETUP.md)
+**Step 1**: Install the [GitHub desktop app](https://desktop.github.com)
 
-In a new Terminal/Command Prompt,
+**Step 2**: Press the green "Clone or download" button at the top of this page and then "Open in Desktop" to open the repository inside the app. Then you can clone (download) the repository to your computer.
 
-**Step 1**: Get to the project folder
+**Step 3**: After you clone the repository, double-click on index.html and the game will open in your browser
 
-*On Mac*
+**Step 4**: Wait for the room id to appear in the URL then copy the URL and paste in Incognito mode or another browser
 
-```
-cd ~/Documents/GitHub/MultiplayerHangman
-```
-
-*On Windows*
-
-```
-cd Documents\GitHub\MultiplayerHangman
-```
-
-**Step 2**: Start the server
-
-*On Mac*
-
-```
-. venv/bin/activate
-export FLASK_APP="server.py"
-export FLASK_DEBUG=1
-flask run
-```
-
-*On Windows*
-
-```
-venv\Scripts\activate
-set FLASK_APP=server.py
-set FLASK_DEBUG=1
-flask run
-```
-
-**Step 3**: Open the webpage
-
-In a browser, go to:
-
-```
-http://localhost:5000
-```
-
-⚠️ When you change JS/CSS, make sure to **refresh while holding the Shift button**! Otherwise the files may be cached by the browser and **you will not see the updates**.
-
+When the game first starts it creates a room and sets the room id in the URL. If the room id is in the URL the browser will join the existing room instead of creating a new room.
 
 ## Project files
 
 These are the files you need to change when you want to make changes.
 
 ```
-MultiplayerHangman/      (project folder)
+hangman/      (project folder)
 |
 ├── server.py            (Python server)
 ├── static/
@@ -78,8 +31,7 @@ MultiplayerHangman/      (project folder)
 |       └── hangman.js   (Javascript loaded on website)
 |   └── css/
 |       └── hangman.css  (CSS loaded on website)
-└── templates/
-    └── index.html       (HTML loaded on website)
+└── index.html       (HTML loaded on website)
 ```
 
 

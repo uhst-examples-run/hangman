@@ -1,7 +1,7 @@
 // Hack to enable the reset() function from the console
 let server;
 
-define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScreen', 'app/loadingScreen', 'app/gameScreen', 'app/resultsScreen', 'app/button'], function (require, p5, Server, Game, Player, TitleScreen, LoadingScreen, GameScreen, ResultsScreen, Button) {
+define(['require', 'p5', 'app/constants', 'app/server', 'app/game', 'app/player', 'app/titleScreen', 'app/loadingScreen', 'app/gameScreen', 'app/resultsScreen', 'app/button'], function (require, p5, c, Server, Game, Player, TitleScreen, LoadingScreen, GameScreen, ResultsScreen, Button) {
 
   'use strict';
 
@@ -12,8 +12,7 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
   const game = new Game(maxLife);
   server = new Server();
 
-  const GameStates = { title: 'titlescreen', loading: 'loadingscreen', game: 'gamescreen', results: 'resultsscreen' };
-  let gameState = GameStates.title;
+  let gameState = c.GameStates.title;
 
   const resetButton = new Button('#reset');
   const submitButton = new Button('#submit');
@@ -44,13 +43,13 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
 
       sketch.posReference();
 
-      if (gameState === GameStates.title) {
+      if (gameState === c.GameStates.title) {
         titleScreen.draw();
-      } else if (gameState === GameStates.loading) {
+      } else if (gameState === c.GameStates.loading) {
         loadingScreen.draw();
-      } else if (gameState === GameStates.game) {
+      } else if (gameState === c.GameStates.game) {
         gameScreen.draw();
-      } else if (gameState === GameStates.results) {
+      } else if (gameState === c.GameStates.results) {
         resultsScreen.draw();
       } else {
         console.error('Trying to display unknown screen: ' + gameState);
@@ -75,9 +74,9 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
     sketch.keyPressed = () => {
       if (!player.userConfirmed) {
         player.playerName = textModify(player.playerName, 20);
-      } else if (gameState === GameStates.loading && player.isChooser()) {
+      } else if (gameState === c.GameStates.loading && player.isChooser()) {
         player.secretPhrase = textModify(player.secretPhrase, 24);
-      } else if (gameState === GameStates.game && player.isGuesser()) {
+      } else if (gameState === c.GameStates.game && player.isGuesser()) {
         player.letterChosen = textModify(player.letterChosen, 1).toUpperCase();
 
         // Don't allow spaces or already guessed letters
@@ -119,13 +118,13 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
 
     // Submit button either for submitting a a secret phrase or guessing a letter
     submitButton.click(function() {
-      if (gameState === GameStates.loading) {
+      if (gameState === c.GameStates.loading) {
         if (player.getSecretPhrase().length > 0) {
           server.submitSecretPhrase(player.getSecretPhrase());
         } else {
           alert('Please enter a phrase.');
         }
-      } else if (gameState === GameStates.game && !game.alreadyGuessed(player.letterChosen)) {
+      } else if (gameState === c.GameStates.game && !game.alreadyGuessed(player.letterChosen)) {
         if (player.letterChosen.length === 1) {
           server.guessLetter(player.letterChosen);
           player.letterChosen = '';
@@ -138,10 +137,10 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
     // Changes the game's state for this particular client
     function setGameState(state) {
       console.assert(
-        gameState === GameStates.title ||
-        gameState === GameStates.loading ||
-        gameState === GameStates.game ||
-        gameState === GameStates.results,
+        gameState === c.GameStates.title ||
+        gameState === c.GameStates.loading ||
+        gameState === c.GameStates.game ||
+        gameState === c.GameStates.results,
         'Unexpected game state: ' + gameState);
       gameState = state;
     }
@@ -159,11 +158,11 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
       console.assert(state, 'Cannot have a null game state');
 
       setGameState(state['gamestate']);
-      if (gameState === GameStates.title) {
+      if (gameState === c.GameStates.title) {
         titleScreen.showChooserGuesserButtons(true);
         resetButton.show();
         submitButton.hide();
-      } else if (gameState === GameStates.loading) {
+      } else if (gameState === c.GameStates.loading) {
         titleScreen.showChooserGuesserButtons(false);
         resetButton.hide();
         if (player.isChooser()) {
@@ -172,12 +171,12 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
         } else {
           submitButton.hide();
         }
-      } else if (gameState === GameStates.game) {
+      } else if (gameState === c.GameStates.game) {
         titleScreen.showChooserGuesserButtons(false);
         resetButton.hide();
         submitButton.show();
         submitButton.enable(player.isGuesser());
-      } else if (gameState === GameStates.results) {
+      } else if (gameState === c.GameStates.results) {
         console.log('Show results screen stuff here');
       } else {
         console.error('Unexpected game state: ' + gameState);
@@ -202,11 +201,11 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
       console.assert(info, 'Cannot have null information on player reset');
 
       const playerTypeEnabled = info['type_enable'];
-      console.assert(playerTypeEnabled === Player.GUESSER_TYPE || playerTypeEnabled === Player.CHOOSER_TYPE, 'Unexpected player type reset: ', playerTypeEnabled);
+      console.assert(playerTypeEnabled === c.PlayerType.GUESSER_TYPE || playerTypeEnabled === c.PlayerType.CHOOSER_TYPE, 'Unexpected player type reset: ', playerTypeEnabled);
 
-      if (playerTypeEnabled === Player.GUESSER_TYPE) {
+      if (playerTypeEnabled === c.PlayerType.GUESSER_TYPE) {
         titleScreen.enableSelectingGuesser(true);
-      } else if (playerTypeEnabled === Player.CHOOSER_TYPE) {
+      } else if (playerTypeEnabled === c.PlayerType.CHOOSER_TYPE) {
         titleScreen.enableSelectingChooser(true);
       }
     });
@@ -217,7 +216,7 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
 
       game.phrase = phrase['discovered_phrase'];
       if (phrase['phrase_completed']) {
-        setGameState(GameStates.results);
+        setGameState(c.GameStates.results);
         submitButton.hide();
         setTimeout(function() { server.emit('prepare_next_round'); }, 5000);
       }
@@ -230,7 +229,7 @@ define(['require', 'p5', 'app/server', 'app/game', 'app/player', 'app/titleScree
       console.log('Resetting game');
       player.reset();
       game.reset(maxLife);
-      gameState = GameStates.title;
+      gameState = c.GameStates.title;
       titleScreen.showChooserGuesserButtons(true);
       resetButton.show();
       submitButton.hide();

@@ -1,5 +1,5 @@
 requirejs.config({
-  baseUrl: '/static/js/lib',
+  baseUrl: './js/lib',
   shim: {
     jquery: {
       exports: '$'

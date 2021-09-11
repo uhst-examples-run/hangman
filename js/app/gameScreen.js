@@ -1,13 +1,11 @@
 define(['require', 'app/constants'], function (require, c) {
-
   'use strict';
 
   class GameScreen {
-
     constructor(sketch, player, game) {
       this.sketch = sketch; // Reference to the p5 library
       this.player = player; // Instantiated Player object
-      this.game = game;     // Instantiated Game object
+      this.game = game; // Instantiated Game object
     }
 
     draw() {
@@ -19,7 +17,12 @@ define(['require', 'app/constants'], function (require, c) {
       this.sketch.fill(255, 180);
       this.sketch.strokeWeight(6);
       this.sketch.line(5, 70, adjustedSW, 70);
-      this.sketch.line(20, c.screenHeight - 90, adjustedSW, c.screenHeight - 90);
+      this.sketch.line(
+        20,
+        c.screenHeight - 90,
+        adjustedSW,
+        c.screenHeight - 90
+      );
 
       this.sketch.stroke(255);
       this.sketch.fill(255);
@@ -50,10 +53,14 @@ define(['require', 'app/constants'], function (require, c) {
       if (this.player.isChooser()) {
         this.sketch.textSize(28);
       }
-      this.sketch.text('Chooser: ' + this.game.chooser, adjustedSW - 150,35);
+      this.sketch.text('Chooser: ' + this.game.chooser, adjustedSW - 150, 35);
       this.sketch.textSize(20);
       this.sketch.strokeWeight(1);
-      this.sketch.text('Round: ' + this.game.round + ' / 5', adjustedSW / 2, 35);
+      this.sketch.text(
+        'Round: ' + this.game.round + ' / 5',
+        adjustedSW / 2,
+        35
+      );
       this.sketch.text(this.player.letterChosen, 400, 660);
       this.sketch.text('Spectators: ', 90, 590);
 
@@ -90,7 +97,14 @@ define(['require', 'app/constants'], function (require, c) {
           this.sketch.ellipse(hangmanCenterX + 8, 222, 12, 12);
         }
         // Frown
-        this.sketch.arc(hangmanCenterX, 250, 20, 20, this.sketch.PI + this.sketch.QUARTER_PI,- this.sketch.QUARTER_PI);
+        this.sketch.arc(
+          hangmanCenterX,
+          250,
+          20,
+          20,
+          this.sketch.PI + this.sketch.QUARTER_PI,
+          -this.sketch.QUARTER_PI
+        );
         this.sketch.fill(255);
         if (hits < c.maxLife) {
           // Normal eye pupils
@@ -128,10 +142,30 @@ define(['require', 'app/constants'], function (require, c) {
         } else {
           standDeviation = 0;
         }
-        this.sketch.line(hangmanCenterX - 55 + standDeviation, 420, hangmanCenterX + 55 + standDeviation, 420);
-        this.sketch.line(hangmanCenterX - 55 + standDeviation, 460, hangmanCenterX + 55 + standDeviation, 460);
-        this.sketch.line(hangmanCenterX - 25 + standDeviation, 420, hangmanCenterX - 40 + standDeviation, 510);
-        this.sketch.line(hangmanCenterX + 25 + standDeviation, 420, hangmanCenterX + 40 + standDeviation, 510);
+        this.sketch.line(
+          hangmanCenterX - 55 + standDeviation,
+          420,
+          hangmanCenterX + 55 + standDeviation,
+          420
+        );
+        this.sketch.line(
+          hangmanCenterX - 55 + standDeviation,
+          460,
+          hangmanCenterX + 55 + standDeviation,
+          460
+        );
+        this.sketch.line(
+          hangmanCenterX - 25 + standDeviation,
+          420,
+          hangmanCenterX - 40 + standDeviation,
+          510
+        );
+        this.sketch.line(
+          hangmanCenterX + 25 + standDeviation,
+          420,
+          hangmanCenterX + 40 + standDeviation,
+          510
+        );
       }
 
       // 'x''s to replace eyes when death occurs
@@ -150,14 +184,14 @@ define(['require', 'app/constants'], function (require, c) {
       this.sketch.stroke(255);
       this.sketch.fill(255);
       this.sketch.strokeWeight(1);
-      this.sketch.text(this.game.phrase, 680, 280);
+      if (this.game.phrase) {
+        this.sketch.text(this.game.phrase, 680, 280);
+      }
       this.sketch.textSize(18);
       this.sketch.text('Used:' + this.game.getLettersList(), 680, 450);
       this.sketch.pop();
     }
-
   }
 
   return GameScreen;
-
 });
